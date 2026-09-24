@@ -67,7 +67,7 @@ button{font:inherit} .stage{min-height:100vh;display:flex;align-items:center;jus
     </div>
   </div>
   <div class="ability-legend" id="abilityLegend"></div>
-  <div class="confidence"><strong>结果怎么理解？</strong><span>基于15题答案的倾向画像</span></div>
+  <div class="why-box"><strong style="display:block;margin-bottom:4px">先看“方向”，再看“能力”</strong><span style="font-size:11px;color:#7d7870">类型 = 你更偏向哪种变现方式；六维能力 = 你用这条路径时，哪些能力更突出。两者不同，但会共同决定你的起点。</span></div><div class="confidence"><strong>结果怎么理解？</strong><span>基于15题答案的倾向画像</span></div>
 </div>
 <div class="section-title">你的优势，不止一个标签</div><div id="strengths"></div>
 <div class="section-title">你可能更适合的 3 个方向</div><div id="directions"></div>
@@ -191,8 +191,20 @@ function choiceEvidence(){
   const indexes=[0,2,4,6,9,12,14];
   indexes.forEach(qi0=>{
     const a=answers[qi0];
-    if(a!=null)selected.push({q:questions[qi0][0],a:questions[qi0][1][a],letter:letters[a],qi:qi0});
+    if(a!=null){
+      const weights=skillWeights[qi0][a];
+      const top=[0,1,2,3,4,5].sort((x,y)=>weights[y]-weights[x]).slice(0,2);
+      selected.push({
+        q:questions[qi0][0],
+        a:questions[qi0][1][a],
+        letter:letters[a],
+        qi:qi0,
+        topSkills:top,
+        topWeight:weights[top[0]]
+      });
+    }
   });
+  selected.sort((x,y)=>y.topWeight-x.topWeight);
   return selected;
 }
 function makeResult(){
@@ -217,7 +229,7 @@ function makeResult(){
   document.getElementById('strengths').innerHTML=rankedAbility.slice(0,3).map(i=>'<div class="dir"><div class="route-head"><strong>'+skillNames[i]+'</strong><span class="score-pill">'+ability[i]+'分</span></div><small>'+skillProfiles[i][1]+'。你的答案在这一项上表现出相对一致的倾向。</small></div>').join('');
 
   const evidence=latestResult.evidence.slice(0,3);
-  document.getElementById('strengths').insertAdjacentHTML('afterend','<div class="section-title">为什么会得到这个结果？</div><div class="evidence-grid">'+evidence.map((e,idx)=>'<div class="evidence"><div class="label">答案信号 '+(idx+1)+'</div><strong>'+e.letter+' · '+e.a+'</strong><small>这项选择与你的“'+skillNames[rankedAbility[idx]]+'”能力倾向有关。</small></div>').join('')+'</div>');
+  document.getElementById('strengths').insertAdjacentHTML('afterend','<div class="section-title">为什么会得到这个结果？</div><div class="evidence-grid">'+evidence.map((e,idx)=>'<div class="evidence"><div class="label">答案信号 '+(idx+1)+'</div><strong>'+e.letter+' · '+e.a+'</strong><small>这项选择对“'+skillNames[e.topSkills[0]]+'”的贡献更明显，并同时关联“'+skillNames[e.topSkills[1]]+'”。</small></div>').join('')+'</div>');
 
   const routeNames=[
     ['AI内容账号','用真实经历、方法论和 AI 学习过程做内容，逐步沉淀个人IP。'],
@@ -242,8 +254,8 @@ function buildDynamicReport(){
   const {a,profile,pair,ability,rankedAbility,evidence}=latestResult;
   document.getElementById('reportTitle').textContent='你的 AI 第二增长曲线';
   document.getElementById('reportType').textContent=pair+' · '+profile.title;
-  document.getElementById('reportEvidence').innerHTML=evidence.slice(0,4).map((e,idx)=>'<div class="evidence"><div class="label">信号 '+(idx+1)+'</div><strong>'+e.letter+' · '+e.a+'</strong><small>它与你的“'+skillNames[rankedAbility[Math.min(idx,2)]]+'”能力倾向相呼应。</small></div>').join('');
-  document.getElementById('reportStrengthText').textContent='你的优势不是单独某一项，而是“'+skillNames[rankedAbility[0]]+' × '+skillNames[rankedAbility[1]]+' × '+skillNames[rankedAbility[2]]+'”形成的组合。真正值得验证的是：能不能把这个组合变成别人愿意付费的结果。';
+  document.getElementById('reportEvidence').innerHTML=evidence.slice(0,4).map((e,idx)=>'<div class="evidence"><div class="label">信号 '+(idx+1)+'</div><strong>'+e.letter+' · '+e.a+'</strong><small>这项答案主要强化“'+skillNames[e.topSkills[0]]+'”，同时关联“'+skillNames[e.topSkills[1]]+'”。</small></div>').join('');
+  document.getElementById('reportStrengthText').textContent='你的方向偏好是“'+(a===b?letters[a]:letters[a]+' + '+letters[b])+' · '+profile.title+'”。在能力层面，你更突出的是“'+skillNames[rankedAbility[0]]+' × '+skillNames[rankedAbility[1]]+' × '+skillNames[rankedAbility[2]]+'”。真正值得验证的是：能不能把这两层组合成别人愿意付费的结果。';
   document.getElementById('reportSkillGrid').innerHTML=rankedAbility.slice(0,4).map(i=>'<div class="mini"><b>'+ability[i]+'</b><span>'+skillNames[i]+' · '+skillProfiles[i][1]+'</span></div>').join('');
 
   const routeNames=[
