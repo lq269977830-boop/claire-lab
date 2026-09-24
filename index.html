@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Claire Lab · AI第二增长曲线</title>
+<style>
+:root{--bg:#f6f3ee;--paper:#fffdfa;--ink:#282827;--muted:#8b8881;--green:#7d907e;--green2:#aab8a9;--lav:#c7bdd6;--line:#e9e4dc;--shadow:0 18px 55px rgba(51,45,37,.10);--radius:24px}
+*{box-sizing:border-box} body{margin:0;background:linear-gradient(135deg,#efebe4,#f8f5f0 48%,#ece8e1);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink)}
+button{font:inherit} .stage{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:30px}
+.phone{width:min(430px,100%);height:min(880px,calc(100vh - 40px));min-height:700px;background:var(--paper);border:1px solid #e3ded5;border-radius:34px;box-shadow:0 30px 90px rgba(38,32,24,.18);overflow:hidden;position:relative}
+.top{height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;border-bottom:1px solid rgba(233,228,220,.8);background:rgba(255,253,250,.88);backdrop-filter:blur(12px);position:relative;z-index:5}.brand{font-family:Georgia,serif;font-size:21px;letter-spacing:.4px}.brand small{font:10px/1 sans-serif;letter-spacing:2px;color:var(--muted);display:block;margin-top:2px}.top button{border:0;background:none;color:var(--muted);font-size:13px;cursor:pointer}.screen{height:calc(100% - 60px);overflow:auto;scrollbar-width:none}.screen::-webkit-scrollbar{display:none}.view{display:none;min-height:100%;padding:28px 24px 32px}.view.active{display:block}.eyebrow{font-size:11px;letter-spacing:2.2px;color:var(--muted);text-transform:uppercase}.hero{padding-top:54px}.hero h1{font-family:Georgia,"Songti SC",serif;font-weight:500;font-size:42px;line-height:1.1;margin:14px 0 16px;letter-spacing:-1px}.hero p{color:#6f6b64;line-height:1.8;margin:0 0 28px}.orb{width:150px;height:150px;border-radius:50%;margin:10px auto 32px;background:radial-gradient(circle at 30% 25%,#fff,#ddd5e5 40%,#a7b6a8 75%,#748879);box-shadow:0 15px 40px rgba(118,126,109,.22);position:relative}.orb:after{content:"";position:absolute;inset:18px;border:1px solid rgba(255,255,255,.65);border-radius:50%}.pillrow{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}.pill{border:1px solid var(--line);padding:7px 11px;border-radius:999px;font-size:11px;color:#77736b;background:#fff}.primary{width:100%;border:0;background:#30322f;color:#fff;padding:16px 18px;border-radius:16px;cursor:pointer;box-shadow:0 10px 24px rgba(48,50,47,.16);transition:.2s}.primary:hover{transform:translateY(-1px)}.secondary{width:100%;border:1px solid #dcd6cd;background:#fff;padding:15px;border-radius:16px;cursor:pointer}.note{text-align:center;color:#9a958d;font-size:11px;margin-top:12px}
+.progress{height:5px;background:#ebe7e0;border-radius:10px;overflow:hidden;margin:12px 0 26px}.progress i{display:block;height:100%;background:var(--green);border-radius:10px;transition:.3s}.qmeta{display:flex;justify-content:space-between;color:#9a958d;font-size:12px}.question h2{font-size:24px;line-height:1.45;font-weight:600;margin:12px 0 24px}.options{display:grid;gap:11px}.option{text-align:left;background:#fff;border:1px solid var(--line);padding:16px;border-radius:17px;cursor:pointer;transition:.18s}.option:hover,.option.selected{border-color:#9baa9a;background:#f4f7f2}.option b{display:inline-flex;width:26px;height:26px;align-items:center;justify-content:center;border-radius:50%;background:#f0ede7;margin-right:10px;font-size:12px}.option span{font-size:14px;line-height:1.45}.backrow{display:flex;gap:10px;margin-top:22px}.backrow button{flex:1}
+.result .hero-card{background:linear-gradient(145deg,#edf1eb,#f4eef5);border:1px solid #e1e3dd;border-radius:25px;padding:25px;margin:20px 0}.type{font-size:29px;font-weight:650;margin:8px 0}.tag{display:inline-block;background:#fff;border:1px solid #e1ded8;border-radius:999px;padding:6px 10px;font-size:11px;margin:3px 3px 3px 0}.radar-wrap{margin:6px -4px 4px}.radar{width:100%;height:260px;margin:0 auto;position:relative}.radar svg{width:100%;height:100%;overflow:visible}.radar-label{font-size:10px;fill:#6f6b64;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}.ability-legend{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:2px}.ability{display:flex;align-items:center;gap:8px;padding:9px 10px;border:1px solid #ece8e1;background:#fff;border-radius:13px}.ability-dot{width:9px;height:9px;border-radius:50%;background:var(--green);flex:none}.ability b{font-size:11px}.ability span{font-size:10px;color:#8b867d;margin-left:auto}.ability-copy{padding:12px 13px;border-radius:15px;background:rgba(255,255,255,.72);border:1px solid rgba(228,225,219,.9);margin-top:10px;font-size:12px;line-height:1.65;color:#6f6b64}.confidence{display:flex;align-items:center;justify-content:space-between;padding:11px 13px;border-radius:14px;background:#f8f6f1;border:1px solid #ebe6de;margin-top:10px}.confidence strong{font-size:12px}.confidence span{font-size:11px;color:#857f76}.section-title{font-size:17px;font-weight:650;margin:28px 0 12px}.dir{padding:15px;border:1px solid var(--line);border-radius:17px;margin:9px 0;background:#fff}.dir strong{display:block;margin-bottom:5px}.dir small{color:#817c74;line-height:1.6}.upgrade{background:#2f322f;color:#fff;border-radius:24px;padding:23px;margin-top:22px}.price{font-size:30px;font-weight:700;margin:5px 0}.upgrade p{color:#d6d8d3;font-size:12px;line-height:1.7}.upgrade .primary{background:#f5f2eb;color:#292b28;box-shadow:none}.report-preview-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:13px 0 16px}.report-preview-row span{font-size:10px;padding:8px 9px;border:1px solid rgba(255,255,255,.14);border-radius:10px;color:#dfe3dd;background:rgba(255,255,255,.06)}
+.report-cover{background:linear-gradient(145deg,#ebe6ee,#eef1eb);border-radius:25px;padding:28px;margin-bottom:18px;min-height:210px;display:flex;flex-direction:column;justify-content:space-between}.report-cover h1{font-family:Georgia,serif;font-size:31px;font-weight:500;line-height:1.2;margin:8px 0}.report-card{border:1px solid var(--line);background:#fff;border-radius:20px;padding:20px;margin:12px 0}.report-card h3{margin:0 0 10px;font-size:16px}.report-card p,.report-card li{font-size:13px;line-height:1.8;color:#68645d}.report-card ul{padding-left:18px;margin-bottom:0}.mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mini{background:#f7f5f0;border-radius:15px;padding:13px}.mini b{font-size:17px;display:block}.mini span{font-size:10px;color:#8a857c}
+.toast{position:absolute;left:50%;bottom:22px;transform:translate(-50%,20px);opacity:0;background:#30322f;color:#fff;padding:10px 15px;border-radius:999px;font-size:12px;transition:.25s;z-index:20}.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:520px){.stage{padding:0}.phone{height:100vh;min-height:100vh;border-radius:0;border:0}.hero h1{font-size:38px}}
+</style>
+</head>
+<body>
+<div class="stage"><main class="phone">
+<header class="top"><button id="backTop" onclick="goHome()">‹</button><div class="brand">Claire Lab<small>AI SECOND GROWTH CURVE</small></div><button onclick="showToast('这是一个可点击原型')">♡</button></header>
+<div class="screen">
+<section id="home" class="view active hero">
+  <div class="eyebrow">Claire Lab · 01</div>
+  <div class="orb"></div>
+  <h1>找到适合你的<br>AI第二增长曲线</h1>
+  <p>不是每个人都适合用同一种方式做副业。用 15 道题，看看你的优势更靠近哪一种 AI 变现路径。</p>
+  <div class="pillrow"><span class="pill">15题</span><span class="pill">约3分钟</span><span class="pill">5种类型</span><span class="pill">即时结果</span></div>
+  <button class="primary" onclick="startTest()">开始测试 →</button>
+  <div class="note">仅用于个人方向探索，不构成职业或心理诊断</div>
+</section>
+
+<section id="quiz" class="view question"><div class="qmeta"><span id="qnum">01 / 15</span><span id="pct">7%</span></div><div class="progress"><i id="bar" style="width:7%"></i></div><div id="qbody"></div></section>
+
+<section id="result" class="view result"><div class="eyebrow">YOUR RESULT</div><div class="hero-card">
+  <div class="eyebrow">你的 AI 副业类型</div>
+  <div class="type" id="resultType">A + E 内容产品型</div>
+  <div id="tags"></div>
+  <div class="ability-copy" id="resultSummary">你更容易在“表达、整理、产品化”之间形成组合优势。这个结果先帮助你看清倾向，真正适合你的方向还需要结合经历、资源和当前目标进一步判断。</div>
+  <div class="radar-wrap">
+    <div class="radar">
+      <svg id="radarSvg" viewBox="0 0 360 270" aria-label="六维能力雷达图">
+        <polygon id="radarGridOuter" points="180,28 287,88 287,194 180,254 73,194 73,88" fill="none" stroke="#d9d7d0"/>
+        <polygon points="180,70 258,106 239,190 121,190 102,106" fill="none" stroke="#e4e1da"/>
+        <polygon points="180,98 232,121 219,164 141,164 128,121" fill="none" stroke="#ebe8e2"/>
+        <line x1="180" y1="28" x2="180" y2="141" stroke="#e5e2dc"/>
+        <line x1="287" y1="88" x2="180" y2="141" stroke="#e5e2dc"/>
+        <line x1="287" y1="194" x2="180" y2="141" stroke="#e5e2dc"/>
+        <line x1="180" y1="254" x2="180" y2="141" stroke="#e5e2dc"/>
+        <line x1="73" y1="194" x2="180" y2="141" stroke="#e5e2dc"/>
+        <line x1="73" y1="88" x2="180" y2="141" stroke="#e5e2dc"/>
+        <polygon id="radarFill" points="180,65 248,110 235,181 125,184 96,109 232,67" fill="#aab8a955" stroke="#7d907e" stroke-width="2"/>
+        <circle id="r0" cx="180" cy="65" r="4" fill="#7d907e"/>
+        <circle id="r1" cx="248" cy="110" r="4" fill="#7d907e"/>
+        <circle id="r2" cx="235" cy="181" r="4" fill="#7d907e"/>
+        <circle id="r3" cx="125" cy="184" r="4" fill="#7d907e"/>
+        <circle id="r4" cx="96" cy="109" r="4" fill="#7d907e"/>
+        <circle id="r5" cx="232" cy="67" r="4" fill="#7d907e"/>
+        <text x="180" y="15" text-anchor="middle" class="radar-label">内容表达</text>
+        <text x="300" y="78" text-anchor="start" class="radar-label">AI工具</text>
+        <text x="300" y="219" text-anchor="start" class="radar-label">问题解决</text>
+        <text x="180" y="269" text-anchor="middle" class="radar-label">获客转化</text>
+        <text x="60" y="219" text-anchor="end" class="radar-label">产品化</text>
+        <text x="60" y="78" text-anchor="end" class="radar-label">执行行动</text>
+      </svg>
+    </div>
+  </div>
+  <div class="ability-legend" id="abilityLegend"></div>
+  <div class="confidence"><strong>结果怎么理解？</strong><span>基于15题答案的倾向画像</span></div>
+</div>
+<div class="section-title">你的优势，不止一个标签</div><div id="strengths"></div>
+<div class="section-title">你可能更适合的 3 个方向</div><div id="directions"></div>
+<div class="upgrade"><div class="eyebrow" style="color:#cbd1c9">DEEP DIVE</div><div class="price">¥19.9</div><strong>《个人优势深度报告》</strong><p>免费结果告诉你“更偏哪类”；深度报告会继续拆解：你的优势组合、适合的变现模式、第一款产品、内容切口，以及 7 天行动路线。</p><div class="report-preview-row"><span>01 优势画像</span><span>02 变现路径</span><span>03 产品建议</span><span>04 7天行动</span></div><button class="primary" onclick="showReport()">查看 19.9 报告示例 →</button></div><div style="height:18px"></div><button class="secondary" onclick="goHome()">重新测试</button></section>
+
+<section id="report" class="view"><div class="eyebrow">CLAIRE LAB · DEEP REPORT</div><div class="report-cover"><div><div class="eyebrow">PERSONAL GROWTH MAP</div><h1>你的 AI 第二增长曲线</h1><p style="color:#6d6961;font-size:12px">A + E · 内容产品型</p></div><div style="font-size:11px;color:#817c74">Claire Lab · 个人优势深度报告</div></div><div class="report-card"><h3>01 · 你的优势画像</h3><p>你更容易在“表达、整理、产品化”之间形成组合优势。相比单纯学习工具，你更适合把一个想法整理成内容，再沉淀成可以重复交付的产品。</p><div class="mini-grid"><div class="mini"><b>表达力</b><span>内容与观点输出</span></div><div class="mini"><b>产品感</b><span>把经验变成结构</span></div><div class="mini"><b>洞察力</b><span>发现真实需求</span></div><div class="mini"><b>执行力</b><span>边做边迭代</span></div></div></div><div class="report-card"><h3>02 · 更值得尝试的变现路径</h3><ul><li>低价测评 / 工具型数字产品</li><li>AI模板、提示词、工作流资料包</li><li>内容账号 + 数字产品组合</li></ul></div><div class="report-card"><h3>03 · 第一款产品建议</h3><p>先从“低客单、标准化、交付成本低”的产品开始，例如 AI 副业适配度测试，再用深度报告承接更高客单。</p></div><div class="report-card"><h3>04 · 7天启动计划</h3><ul><li>Day 1：完成测试题与结果文案</li><li>Day 2：搭建移动端页面</li><li>Day 3：做 3 个小红书内容样例</li><li>Day 4–5：邀请 10 位真实用户测试</li><li>Day 6：根据反馈改产品</li><li>Day 7：正式上架并观察转化</li></ul></div><button class="primary" onclick="showToast('原型演示：这里可以继续接入真实购买与报告生成')">保存我的报告</button><div style="height:22px"></div></section>
+</div><div id="toast" class="toast"></div>
+</main></div>
+<script>
+const questions=[
+['如果给你一个新的 AI 工具，你第一反应更接近？',['研究它能做什么并分享','自己研究、测试、折腾','想想能帮谁解决问题','想办法找到客户或卖出去','想把它做成一个可售卖的产品']],
+['每天只有 2 小时做副业，你最愿意花在哪里？',['做内容、经营账号','学习 AI 工具、做项目','帮别人解决具体问题','找客户、做转化','做模板、资料或数字产品']],
+['哪一种结果最容易让你觉得“我擅长这个”？',['内容有人喜欢、有人互动','把一个新东西研究明白','别人因为我的方案解决了问题','把一个陌生人转化成客户','一个东西可以重复卖']],
+['如果运营一个小红书账号，你最想做？',['表达自己的经历和观点','分享 AI 工具与效率方法','拆解真实问题并给方案','做获客、销售、商业内容','内容和产品一起卖']],
+['遇到一个完全陌生的问题，你通常会？',['看资料、看别人怎么做，再整理','自己搜索、测试、验证','先问清楚对方真正需要什么','先找成熟案例和资源','把解决过程整理成可复制流程']],
+['朋友最可能因为哪件事来找你？',['帮忙想内容、表达观点','研究工具、软件、AI','帮忙梳理复杂问题','谈客户、谈合作、谈成交','帮忙整理资料、做成模板']],
+['如果做一个小项目，你最想看到的结果？',['涨粉、有人关注','项目真的跑起来','客户的问题被解决','有人愿意付钱','产品能持续卖而不用重复做']],
+['如果连续一个月没有收入，你仍然愿意积累什么？',['内容和粉丝','AI能力和项目经验','客户案例','潜在客户和销售能力','可复用的产品资产']],
+['你更喜欢哪一种工作状态？',['自由表达、灵感驱动','独立研究、不断试新工具','有明确需求、解决具体问题','有目标、有结果、有成交','做一次、优化后重复卖']],
+['朋友让你帮忙做一个 AI 项目，你最想负责？',['账号和内容','工具和自动化','需求分析和解决方案','获客和转化','产品化和标准化']],
+['你对“公开表达自己”的接受度？',['比较喜欢','不露脸也可以','看具体场景','为了获客可以','更希望产品替我说话']],
+['如果只有 1000 元启动 AI 副业，你会？',['投入内容和账号','投入工具和学习','先找真实需求做服务','投入获客和转化','做一个数字产品']],
+['下面哪种赚钱方式最吸引你？',['内容流量、合作、带货','AI 工具或自动化收费','技能和服务收费','获客、销售、佣金','数字产品重复销售']],
+['未来 6 个月只能持续做一件事，你更愿意？',['持续做内容','持续研究 AI、做项目','持续服务客户、积累案例','持续做获客和销售','持续优化一个产品']],
+['如果一年后真的建立了第二收入，你最希望它来自？',['个人品牌和内容','AI 工具/技术能力','解决问题的专业服务','销售和获客能力','自己的产品持续销售']]
+];
+let qi=0, answers=[];
+const letters=['A','B','C','D','E'];
+function show(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelector('.screen').scrollTop=0}
+function goHome(){show('home');qi=0;answers=[]}
+function startTest(){qi=0;answers=[];renderQ();show('quiz')}
+function renderQ(){let q=questions[qi];document.getElementById('qnum').textContent=String(qi+1).padStart(2,'0')+' / 15';let p=Math.round((qi+1)/15*100);document.getElementById('pct').textContent=p+'%';document.getElementById('bar').style.width=p+'%';document.getElementById('qbody').innerHTML=`<h2>${q[0]}</h2><div class="options">${q[1].map((x,i)=>`<button class="option" onclick="choose(${i})"><b>${letters[i]}</b><span>${x}</span></button>`).join('')}</div><div class="backrow">${qi?'<button class="secondary" onclick="prevQ()">← 上一题</button>':''}<button class="secondary" onclick="showToast('选一个最接近你的答案即可，不用想太久')">小提示</button></div>`}
+function choose(i){answers[qi]=i;if(qi<14){qi++;renderQ()}else{makeResult();show('result')}}
+function prevQ(){if(qi>0){qi--;renderQ()}}
+function makeResult(){
+  let scores=[0,0,0,0,0];
+  answers.forEach(a=>{scores[a]++});
+  let sorted=[0,1,2,3,4].sort((a,b)=>scores[b]-scores[a]);
+  let a=sorted[0],b=sorted[1];
+  let names=['内容型','工具型','服务型','销售型','产品型'];
+  let pair=a===b?letters[a]:letters[a]+' + '+letters[b];
+  let title=(a===0&&b===4)||(a===4&&b===0)?'内容产品型':(a===1&&b===4)||(a===4&&b===1)?'工具产品型':(a===2&&b===3)||(a===3&&b===2)?'服务销售型':names[a];
+  document.getElementById('resultType').textContent=pair+' '+title;
+  document.getElementById('tags').innerHTML=`<span class="tag">${names[a]}</span><span class="tag">${names[b]}</span><span class="tag">15题倾向画像</span>`;
+  const ability=calcAbilities(scores);
+  renderRadar(ability);
+  const profiles=[
+    ['表达与内容','你对表达、观点整理和内容输出的倾向较明显。'],
+    ['AI工具与学习','你对新工具、自动化和持续试错的接受度较高。'],
+    ['问题解决','你容易从真实需求出发，把复杂问题拆成可执行步骤。'],
+    ['获客与转化','你对沟通、需求判断、成交和商业结果更敏感。'],
+    ['产品化','你更关注模板、流程、标准化和重复交付。'],
+    ['执行行动','你是否愿意持续把想法变成具体产出，会直接影响副业结果。']
+  ];
+  document.getElementById('abilityLegend').innerHTML=ability.map((v,i)=>`<div class="ability"><span class="ability-dot"></span><b>${profiles[i][0]}</b><span>${v} / 100</span></div>`).join('');
+  const rankedAbility=[0,1,2,3,4,5].sort((x,y)=>ability[y]-ability[x]);
+  document.getElementById('resultSummary').textContent=`你的前两项倾向是“${profiles[rankedAbility[0]][0]} × ${profiles[rankedAbility[1]][0]}”。${summaryFor(a,b)}`;
+  document.getElementById('strengths').innerHTML=rankedAbility.slice(0,3).map(i=>`<div class="dir"><strong>${profiles[i][0]} · ${ability[i]}分</strong><small>${profiles[i][1]}</small></div>`).join('');
+  document.getElementById('directions').innerHTML=dirs(a,b).map(d=>`<div class="dir"><strong>${d[0]}</strong><small>${d[1]}</small></div>`).join('');
+}
+function calcAbilities(scores){
+  const max=Math.max(...scores,1);
+  const base=scores.map(s=>Math.round(46+(s/max)*42));
+  const mix=[
+    base[0],
+    base[1],
+    Math.round((base[2]*.65+base[1]*.2+base[4]*.15)),
+    Math.round((base[3]*.7+base[0]*.15+base[2]*.15)),
+    Math.round((base[4]*.72+base[0]*.18+base[1]*.10)),
+    Math.round(58+(Math.max(...scores)-Math.min(...scores))*4)
+  ];
+  return mix.map(v=>Math.max(42,Math.min(95,v)));
+}
+function radarPoints(vals){
+  const cx=180,cy=141;
+  const pts=[
+    [0,-113],[0.951,-53],[0.951,53],[0,113],[-0.951,53],[-0.951,-53]
+  ];
+  return vals.map((v,i)=>{const r=v/100;return `${(cx+pts[i][0]*113*r).toFixed(1)},${(cy+pts[i][1]*r).toFixed(1)}`}).join(' ');
+}
+function renderRadar(vals){
+  document.getElementById('radarFill').setAttribute('points',radarPoints(vals));
+  vals.forEach((v,i)=>{const p=radarPoints(vals).split(' ')[i].split(',');document.getElementById('r'+i).setAttribute('cx',p[0]);document.getElementById('r'+i).setAttribute('cy',p[1]);});
+}
+function summaryFor(a,b){
+  const key=[a,b].sort().join('');
+  const map={
+    '04':'你往往不是只想做内容，而是会自然地思考“内容怎样变成产品”。',
+    '01':'你更容易通过学习新工具，把想法快速做成可见成果。',
+    '14':'你适合把工具能力继续沉淀成可复制的产品或工作流。',
+    '23':'你更容易把解决问题和商业转化连接起来。',
+    '03':'你适合把表达与商业结果放在同一条线上验证。'
+  };
+  return map[key]||'你的答案显示出较明显的复合倾向，因此比起单一标签，更值得看你的能力组合和具体行动场景。';
+}
+function dirs(a,b){let map=[['AI内容账号','用真实经历、方法论和AI学习过程做内容，逐步沉淀个人IP。'],['AI工具 / 自动化','用 Vibe Coding、工作流和 AI 工具解决具体效率问题。'],['AI服务 / 咨询','围绕企业获客、内容、流程等具体问题提供标准化服务。'],['AI获客 / 销售','把内容流量、线索获取和成交能力组合成商业服务。'],['AI数字产品','把经验、模板、测评、提示词和流程做成可重复交付的产品。']];return [map[a],map[b],map[(a+b+2)%5]]}
+function showReport(){show('report')}
+function showToast(t){let e=document.getElementById('toast');e.textContent=t;e.classList.add('show');clearTimeout(window.__toast);window.__toast=setTimeout(()=>e.classList.remove('show'),1800)}
+</script>
+</body></html>
