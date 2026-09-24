@@ -251,7 +251,7 @@ function makeResult(){
 }
 function buildDynamicReport(){
   if(!latestResult)return;
-  const {a,profile,pair,ability,rankedAbility,evidence}=latestResult;
+  const {a,b,profile,pair,ability,rankedAbility,evidence}=latestResult;
   document.getElementById('reportTitle').textContent='你的 AI 第二增长曲线';
   document.getElementById('reportType').textContent=pair+' · '+profile.title;
   document.getElementById('reportEvidence').innerHTML=evidence.slice(0,4).map((e,idx)=>'<div class="evidence"><div class="label">信号 '+(idx+1)+'</div><strong>'+e.letter+' · '+e.a+'</strong><small>这项答案主要强化“'+skillNames[e.topSkills[0]]+'”，同时关联“'+skillNames[e.topSkills[1]]+'”。</small></div>').join('');
