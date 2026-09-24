@@ -211,7 +211,7 @@ function makeResult(){
   document.getElementById('tags').innerHTML='<span class="tag">'+names[a]+'</span><span class="tag">'+names[b]+'</span><span class="tag">'+certainty+'</span>';
   renderRadar(ability);
 
-  document.getElementById('resultSummary').innerHTML='你的前两项倾向是“'+skillNames[rankedAbility[0]]+' × '+skillNames[rankedAbility[1]]”。'+profile.desc+' <strong style="color:#55514b">不是给你贴标签，而是帮助你决定从哪里开始验证。</strong>';
+  document.getElementById('resultSummary').innerHTML='你的前两项倾向是“'+skillNames[rankedAbility[0]]+' × '+skillNames[rankedAbility[1]]+'”。'+profile.desc+' <strong style="color:#55514b">不是给你贴标签，而是帮助你决定从哪里开始验证。</strong>';
   document.getElementById('abilityLegend').innerHTML=ability.map((v,i)=>'<div class="ability"><span class="ability-dot"></span><b>'+skillNames[i]+'</b><span>'+v+' / 100</span></div>').join('');
 
   document.getElementById('strengths').innerHTML=rankedAbility.slice(0,3).map(i=>'<div class="dir"><div class="route-head"><strong>'+skillNames[i]+'</strong><span class="score-pill">'+ability[i]+'分</span></div><small>'+skillProfiles[i][1]+'。你的答案在这一项上表现出相对一致的倾向。</small></div>').join('');
